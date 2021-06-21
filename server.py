@@ -1,5 +1,17 @@
 import socket
 import constants
+from _thread import *
+
+def createNewThread(c):
+    # Send a thank you message to the client
+    c.send(b'Thank you for connecting')
+
+    # Close the connection with the client
+    c.close
+
+def multiThread(c):
+    # The function to create new thread
+    start_new_thread(createNewThread, (c,))
 
 # Create socket obnject
 s = socket.socket()
@@ -20,9 +32,9 @@ while True:
     # Establish connection with client
     c, addr = s.accept()
     print("Got connection from", addr)
-
-    # Send a thank you message to the client
-    c.send(b'Thank you for connecting')
-
-    # close the connection with the client
-    c.close()
+    
+    # Starting one new thread 
+    multiThread(c)
+    
+    
+    
