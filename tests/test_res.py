@@ -1,6 +1,6 @@
 import unittest
 from pprint import pprint
-from res_maker import parse_http_req
+from res_maker import parse_http_req, make_response
 
 test_header = """GET /index.html HTTP/1.1
 Host: localhost:8000
@@ -20,6 +20,9 @@ class TestRequest(unittest.TestCase):
         self.assertEqual(result["verb"], "GET")
         self.assertEqual(result["path"], "/index.html")
         self.assertEqual(result["body"], "Yes ma")
+
+    def test_res(self):
+        make_response(test_header)
 
 if __name__ == '__main__':
     unittest.main()
