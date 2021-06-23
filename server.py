@@ -4,9 +4,6 @@ from _thread import *
 from res_maker import handle_request
 
 def createNewThread(c, addr):
-    # Send a thank you message to the client
-    c.send(b'Thank you for connecting')
-
     # Connect to res_maker
     handle_request(c, addr)
 
