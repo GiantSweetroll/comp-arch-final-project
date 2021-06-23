@@ -1,9 +1,10 @@
 from functools import reduce
 from os import path, getcwd
+from sys import argv
 import datetime
 import mimetypes
 from socket import socket
-from time import time
+from time import time, time_ns
 from typing import Tuple
 
 # Init
@@ -11,6 +12,9 @@ from typing import Tuple
 mimetypes.init()
 
 working_dir = getcwd()
+
+# Set working directory if supplied.
+if (len(argv) >= 2): working_dir = path.abspath(argv[1])
 
 def __header_to_dict(x: dict, y: str) -> dict:
     # If no string, return.
@@ -70,7 +74,7 @@ def make_response(req: str) -> Tuple[bytes, bytes]:
     :returns: Tuple of 2. The first one is the header, and the second one is
     body. Both is in binary.
     """
-    start_time = time()
+    start_time = time_ns()
 
     p_req = parse_http_req(req)
     req_path = path.join(working_dir, p_req["path"][1:])
@@ -100,11 +104,13 @@ Content-Length: {len(body)}
 Content-Type: {mime}
 
 """
+
+    proctime = ((time_ns() - start_time)/1000000).__round__(3)
     # Print status
     print(f"Request \
 {p_req['verb']} {p_req['path']} | \
 {status} | \
-Proctime: {((time() - start_time)*1000).__round__(3)}ms")
+Proctime: {proctime}ms")
 
     return (header.encode("utf-8"), body)
 
