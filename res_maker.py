@@ -2,11 +2,12 @@ from functools import reduce
 from os import path, getcwd
 import datetime
 
+# TODO: Other files that are not here is sent to be downloaded.
 __format_type = {
     ".html": "text/html"
 }
 
-def __header_to_dict(x: dict, y: str):
+def __header_to_dict(x: dict, y: str) -> dict:
     # If no string, return.
     if len(y) <= 0: return x
 
@@ -89,3 +90,6 @@ Content-Type: {__format_type.get(format, "")}
     print(f"Request {p_req['verb']} {p_req['path']} | {status}")
 
     return response
+
+def handle_request(c, addr):
+    pass
