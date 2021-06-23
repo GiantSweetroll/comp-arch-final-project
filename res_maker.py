@@ -1,11 +1,13 @@
 from functools import reduce
 from os import path, getcwd
 import datetime
+import mimetypes
 
+# Init
 # TODO: Other files that are not here is sent to be downloaded.
-__format_type = {
-    ".html": "text/html"
-}
+mimetypes.init()
+
+working_dir = getcwd()
 
 def __header_to_dict(x: dict, y: str) -> dict:
     # If no string, return.
@@ -62,7 +64,7 @@ def make_response(req: str):
     """Creates a response string for the supplied argument
     """
     p_req = parse_http_req(req)
-    req_path = path.join(getcwd(), p_req["path"][1:])
+    req_path = path.join(working_dir, p_req["path"][1:])
 
     status = "200 OK"
     body = ""
@@ -80,9 +82,10 @@ def make_response(req: str):
         status = "500 Internal Server Error"
     
     response = f"""HTTP/1.1 {status}
+Server: EpicusMaximus
 Date: {datetime.datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')}
 Content-Length: {len(body)}
-Content-Type: {__format_type.get(format, "")}
+Content-Type: {mimetypes.guess_type(req_path)}
 
 {body}"""
 
@@ -90,6 +93,7 @@ Content-Type: {__format_type.get(format, "")}
     print(f"Request {p_req['verb']} {p_req['path']} | {status}")
 
     return response
+
 
 def handle_request(c, addr):
     pass

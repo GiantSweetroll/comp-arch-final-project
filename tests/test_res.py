@@ -5,7 +5,6 @@ from res_maker import parse_http_req, make_response
 test_header = """GET /index.html HTTP/1.1
 Host: localhost:8000
 Connection: keep-alive
-Content-Type: text/html
 Content-Length: 6
 
 Yes man!
@@ -22,7 +21,7 @@ class TestRequest(unittest.TestCase):
         self.assertEqual(result["body"], "Yes ma")
 
     def test_res(self):
-        make_response(test_header)
+        pprint(make_response(test_header))
 
 if __name__ == '__main__':
     unittest.main()
