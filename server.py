@@ -8,7 +8,7 @@ def createNewThread(c, addr):
     handle_request(c, addr)
 
     # Close the connection with the client
-    c.close
+    c.close()
 
 def multiThread(c, addr):
     # The function to create new thread
