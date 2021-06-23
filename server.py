@@ -1,17 +1,21 @@
 import socket
 import constants
 from _thread import *
+from res_maker import handle_request
 
-def createNewThread(c):
+def createNewThread(c, addr):
     # Send a thank you message to the client
     c.send(b'Thank you for connecting')
+
+    # Connect to res_maker
+    handle_request(c, addr)
 
     # Close the connection with the client
     c.close
 
-def multiThread(c):
+def multiThread(c, addr):
     # The function to create new thread
-    start_new_thread(createNewThread, (c,))
+    start_new_thread(createNewThread, (c, addr))
 
 # Create socket obnject
 s = socket.socket()
@@ -34,7 +38,7 @@ while True:
     print("Got connection from", addr)
     
     # Starting one new thread 
-    multiThread(c)
+    multiThread(c, addr)
     
     
     
