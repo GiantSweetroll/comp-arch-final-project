@@ -2,6 +2,9 @@ from functools import reduce
 from os import path, getcwd
 import datetime
 import mimetypes
+from socket import socket
+from time import time
+from typing import Tuple
 
 # Init
 # TODO: Other files that are not here is sent to be downloaded.
@@ -29,7 +32,7 @@ def __header_to_dict(x: dict, y: str) -> dict:
 
 def parse_http_req(req: str) -> dict:
     """Processes the HTTP request string and parses it to a dictionary.
-    :req: Request string
+    :req: Request HTTP string
 
     :returns: Dictionary of parsed string.
     """
@@ -60,40 +63,55 @@ def parse_http_req(req: str) -> dict:
         "body": body,
     }
 
-def make_response(req: str):
+def make_response(req: str) -> Tuple[bytes, bytes]:
     """Creates a response string for the supplied argument
+    :req: Request HTTP string
+
+    :returns: Tuple of 2. The first one is the header, and the second one is
+    body. Both is in binary.
     """
+    start_time = time()
+
     p_req = parse_http_req(req)
     req_path = path.join(working_dir, p_req["path"][1:])
 
     status = "200 OK"
-    body = ""
+    body = b""
 
     # File format, for header
-    format = p_req["path"][p_req["path"].rfind("."):]
+    # format = p_req["path"][p_req["path"].rfind("."):]
 
     # Open file
     try:
-        with open(req_path, "r") as file:
+        with open(req_path, "rb") as file:
             body = file.read()
     except FileNotFoundError:
         status = "404 Not Found"
     except Exception:
         status = "500 Internal Server Error"
+
+    mime_tup = mimetypes.guess_type(req_path)
+    mime = f"{mime_tup[0]}; {mime_tup[1]}"
     
-    response = f"""HTTP/1.1 {status}
+    header = f"""HTTP/1.1 {status}
 Server: EpicusMaximus
 Date: {datetime.datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')}
 Content-Length: {len(body)}
-Content-Type: {mimetypes.guess_type(req_path)}
+Content-Type: {mime}
 
-{body}"""
+"""
+    # Print status
+    print(f"Request \
+{p_req['verb']} {p_req['path']} | \
+{status} | \
+Proctime: {((time() - start_time)*1000).__round__(3)}ms")
 
-    # Print response
-    print(f"Request {p_req['verb']} {p_req['path']} | {status}")
-
-    return response
+    return (header.encode("utf-8"), body)
 
 
-def handle_request(c, addr):
-    pass
+def handle_request(c: socket, addr):
+    req = c.recv(8192).decode("utf-8")
+    res = make_response(req)
+
+    c.send(res[0])
+    c.send(res[1])
