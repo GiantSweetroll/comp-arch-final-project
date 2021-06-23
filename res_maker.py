@@ -121,3 +121,6 @@ def handle_request(c: socket, addr):
 
     c.send(res[0])
     c.send(res[1])
+
+    # closing connection after sending response
+    c.close()
