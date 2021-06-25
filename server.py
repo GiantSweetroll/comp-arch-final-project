@@ -35,8 +35,14 @@ while True:
     c, addr = s.accept()
     print("Got connection from", addr)
     
-    # a function to create new worker thread to handle incoming requests
-    createNewThread(c,addr)
+    # Set a limit for maximum worker threads into 30 
+    if(threading.active_count()-1 <=30):
+        # a function to create new worker thread to handle incoming requests
+        createNewThread(c,addr)
+    
+    else:
+        print("Maximum connection exceeded")
+
     
     # Checking the worker threads, it will use the threading active acount function
     # deducted by 1 to exclude the main thread count
