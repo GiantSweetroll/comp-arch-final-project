@@ -1,5 +1,5 @@
 # Socket Multithreading with Python
-This is the final project for Computer Architecture course. It shows the usage of multithreading alongside socket programming using Python.
+This is the final project for Computer Architecture course. It shows the usage of multithreading alongside socket programming as well as setting up a local web server using Python.
 
 ## How to use
 Open a terminal in the root directory of this project and type:
