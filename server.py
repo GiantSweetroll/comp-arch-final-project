@@ -14,7 +14,7 @@ def createNewThread(c, addr):
     thread.start()
     
 
-# Create socket obnject
+# Create socket object
 s = socket.socket()
 print("Socket successfully created")
 
