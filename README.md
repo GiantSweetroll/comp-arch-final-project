@@ -1,12 +1,13 @@
 # Socket Multithreading with Python
-This is the final project for Computer Architecture course. It shows the usage of multithreading alongside socket programming using Python.
+This is the final project for Computer Architecture course. It shows the usage of multithreading alongside socket programming as well as setting up a local web server using Python.
 
 ## How to use
 Open a terminal in the root directory of this project and type:
 ```
 python server.py public
 ```
-Open your browser and type the following in the address bar
+You can change `public` into any of the folder you want to serve content for the web server. <br> <br>
+Next, open your browser and type the following in the address bar
 ```
 localhost:8085
 ```
@@ -15,6 +16,8 @@ You should be able to see the following page: <br>
 
 You can also browse to `localhost:8085/noanime.jpg` to get this image <br>
 ![noanime](https://user-images.githubusercontent.com/33752872/123390148-ccba4d80-d5c4-11eb-9fe1-d2fc233e0724.jpg) <br>
+<br>
+You can add more images or html files in the `public` folder or your specified folder to serve it in your server.
 
 If you see in the console now, you will see the following output:
 ```
