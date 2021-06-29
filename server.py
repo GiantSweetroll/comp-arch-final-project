@@ -41,7 +41,8 @@ while True:
         createNewThread(c,addr)
     
     else:
-        print("Maximum connection exceeded")
+        print("Maximum connection exceeded, please try again later.")
+        c.close()       # Close the connection because it would not be able to receive any data.
 
     
     # Checking the worker threads, it will use the threading active acount function
