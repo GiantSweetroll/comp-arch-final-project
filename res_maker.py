@@ -11,10 +11,8 @@ from typing import Tuple
 # TODO: Other files that are not here is sent to be downloaded.
 mimetypes.init()
 
-working_dir = getcwd()
-
-# Set working directory if supplied.
-if (len(argv) >= 2): working_dir = path.abspath(argv[1])
+# Set the server working directory
+working_dir = path.abspath(argv[1]) if (len(argv) >= 2) else getcwd()
 
 def __header_to_dict(x: dict, y: str) -> dict:
     # If no string, return.
@@ -104,7 +102,6 @@ Content-Length: {len(body)}
 Content-Type: {mime}
 
 """
-
     proctime = ((time_ns() - start_time)/1000000).__round__(3)
     # Print status
     print(f"Request \
@@ -112,8 +109,8 @@ Content-Type: {mime}
 {status} | \
 Proctime: {proctime}ms")
 
+    # Return everything
     return (header.encode("utf-8"), body)
-
 
 def handle_request(c: socket, addr):
     req = c.recv(8192).decode("utf-8")
